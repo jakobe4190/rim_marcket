@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول / إنشاء حساب</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f8f8;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            direction: rtl; /* لضبط النصوص من اليمين إلى اليسار */
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #1b8d54;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: right;
+        }
+
+        .submit-btn, .google-btn, .facebook-btn {
+            background-color: #17963d;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .google-btn {
+            background-color: #db4437;
+        }
+
+        .facebook-btn {
+            background-color: #4267B2;
+        }
+
+        .submit-btn:hover, .google-btn:hover, .facebook-btn:hover {
+            opacity: 0.9;
+        }
+
+        .link {
+            display: block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .back-btn {
+            background-color: #721d1d;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: inline-block;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>تسجيل الدخول</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="emailOrPhone">البريد الإلكتروني أو رقم الهاتف:</label>
+                <input type="text" id="emailOrPhone" placeholder="أدخل البريد الإلكتروني أو رقم الهاتف" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">كلمة السر:</label>
+                <input type="password" id="password" placeholder="أدخل كلمة السر" required>
+            </div>
+
+            <button type="submit" class="submit-btn">تسجيل الدخول</button>
+            <button type="button" class="google-btn">الدخول باستخدام Google</button>
+            <button type="button" class="facebook-btn">الدخول باستخدام Facebook</button>
+
+            <a href="#" class="link" onclick="showForgotPassword()">نسيت كلمة السر؟</a>
+            <a href="#" class="link" onclick="showSignUp()">إنشاء حساب جديد</a>
+        </form>
+
+        <form id="signupForm" style="display: none;">
+            <h2>إنشاء حساب</h2>
+            <div class="form-group">
+                <label for="signupEmailOrPhone">البريد الإلكتروني أو رقم الهاتف:</label>
+                <input type="text" id="signupEmailOrPhone" placeholder="أدخل البريد الإلكتروني أو رقم الهاتف" required>
+            </div>
+
+            <div class="form-group">
+                <label for="signupPassword">كلمة السر:</label>
+                <input type="password" id="signupPassword" placeholder="أدخل كلمة السر" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">تأكيد كلمة السر:</label>
+                <input type="password" id="confirmPassword" placeholder="أدخل تأكيد كلمة السر" required>
+            </div>
+
+            <button type="submit" class="submit-btn">إنشاء حساب</button>
+            <button type="button" class="google-btn">التسجيل باستخدام Google</button>
+            <button type="button" class="facebook-btn">التسجيل باستخدام Facebook</button>
+
+            <a href="#" class="link" onclick="showLogin()">لديك حساب بالفعل؟ تسجيل الدخول</a>
+        </form>
+
+        <form id="forgotPasswordForm" style="display: none;">
+            <h2>استعادة كلمة السر</h2>
+            <div class="form-group">
+                <label for="recoveryEmailOrPhone">البريد الإلكتروني أو رقم الهاتف:</label>
+                <input type="text" id="recoveryEmailOrPhone" placeholder="أدخل البريد الإلكتروني أو رقم الهاتف" required>
+            </div>
+
+            <button type="submit" class="submit-btn">استعادة كلمة السر</button>
+            <a href="#" class="link" onclick="showLogin()">العودة لتسجيل الدخول</a>
+        </form>
+
+        <div class="back-btn" onclick="goBack()">الرجوع</div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+
+        function showSignUp() {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'block';
+            forgotPasswordForm.style.display = 'none';
+        }
+
+        function showLogin() {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+            forgotPasswordForm.style.display = 'none';
+        }
+
+        function showForgotPassword() {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'none';
+            forgotPasswordForm.style.display = 'block';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

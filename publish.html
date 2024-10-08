@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نشر المنتج</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8f8f8;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            direction: rtl; /* لضبط النصوص من اليمين إلى اليسار */
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #11793f;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: right; /* لتنسيق النص داخل الحقول */
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px;
+            background-color: #1e7a5c;
+            color: #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #000000;
+        }
+
+        .images-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .images-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .submit-btn {
+            background-color: #167757;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #000000;
+        }
+
+        .back-btn {
+            background-color: #5c1c1c;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: inline-block;
+            width: 20%;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background-color: #333;
+        }
+
+        .icon-upload {
+            margin-left: 5px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>نشر منتج</h2>
+        <form id="productForm">
+            <div class="form-group">
+                <label for="productName">اسم المنتج:</label>
+                <input type="text" id="productName" placeholder="أدخل اسم المنتج" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productDetails">تفاصيل المنتج:</label>
+                <textarea id="productDetails" placeholder="أدخل تفاصيل المنتج" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="productPrice">السعر:</label>
+                <input type="number" id="productPrice" placeholder="أدخل السعر" required>
+            </div>
+
+            <div class="form-group">
+                <label for="whatsappNumber">رقم الواتساب:</label>
+                <input type="tel" id="whatsappNumber" placeholder="أدخل رقم الواتساب" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productImages">صور المنتج (4 صور كحد أقصى):</label>
+                <label class="custom-file-upload">
+                    <span class="icon-upload">📥</span>
+                    upload
+                    <input type="file" id="productImages" accept="image/*" multiple>
+                </label>
+                <div class="images-preview" id="imagesPreview"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">نشر المنتج</button>
+        </form>
+        <div class="back-btn" onclick="goBack()">الرجوع</div>
+    </div>
+
+    <script>
+        const productForm = document.getElementById('productForm');
+        const productImages = document.getElementById('productImages');
+        const imagesPreview = document.getElementById('imagesPreview');
+        const MAX_IMAGES = 4;
+
+        let productImagesData = [];
+
+        // عرض الصور بشكل معاينة
+        productImages.addEventListener('change', function() {
+            imagesPreview.innerHTML = '';
+            productImagesData = [];
+            const files = Array.from(this.files).slice(0, MAX_IMAGES);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imagesPreview.appendChild(img);
+                    productImagesData.push(e.target.result); // حفظ الصورة في مصفوفة
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // نشر المنتج
+        productForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const productName = document.getElementById('productName').value;
+            const productDetails = document.getElementById('productDetails').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const whatsappNumber = document.getElementById('whatsappNumber').value;
+
+            if (productName && productDetails && productPrice && whatsappNumber && productImagesData.length) {
+                const newProduct = {
+                    name: productName,
+                    details: productDetails,
+                    price: productPrice,
+                    whatsapp: whatsappNumber,
+                    images: productImagesData
+                };
+
+                saveProduct(newProduct);
+                alert('تم نشر المنتج بنجاح!');
+                productForm.reset();
+                imagesPreview.innerHTML = '';
+            } else {
+                alert('يرجى تعبئة كافة الحقول المطلوبة.');
+            }
+        });
+
+        // حفظ المنتج في Local Storage
+        function saveProduct(product) {
+            const products = JSON.parse(localStorage.getItem('products') || '[]');
+            products.push(product);
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        // وظيفة الرجوع
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
