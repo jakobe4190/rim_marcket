@@ -160,67 +160,68 @@
     </div>
 
     <script>
-        const productForm = document.getElementById('productForm');
-        const productImages = document.getElementById('productImages');
-        const imagesPreview = document.getElementById('imagesPreview');
-        const MAX_IMAGES = 4;
+        // تعديل دالة نشر المنتج للتأكد من تسجيل الدخول
+productForm.addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        let productImagesData = [];
+    // تحقق من تسجيل الدخول
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn !== 'true') {
+        alert('يرجى تسجيل الدخول أو إنشاء حساب لنشر المنتج.');
+        window.location.href = 'login.html'; // إعادة توجيه إلى صفحة التسجيل
+        return;
+    }
 
-        // عرض الصور بشكل معاينة
-        productImages.addEventListener('change', function() {
-            imagesPreview.innerHTML = '';
-            productImagesData = [];
-            const files = Array.from(this.files).slice(0, MAX_IMAGES);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    imagesPreview.appendChild(img);
-                    productImagesData.push(e.target.result); // حفظ الصورة في مصفوفة
-                };
-                reader.readAsDataURL(file);
-            });
+    const productName = document.getElementById('productName').value;
+    const productDetails = document.getElementById('productDetails').value;
+    const productPrice = document.getElementById('productPrice').value;
+    const whatsappNumber = document.getElementById('whatsappNumber').value;
+
+    if (productName && productDetails && productPrice && whatsappNumber && productImagesData.length) {
+        const newProduct = {
+            name: productName,
+            details: productDetails,
+            price: productPrice,
+            whatsapp: whatsappNumber,
+            images: productImagesData
+        };
+
+        saveProduct(newProduct);
+        alert('تم نشر المنتج بنجاح!');
+        productForm.reset();
+        imagesPreview.innerHTML = '';
+    } else {
+        alert('يرجى تعبئة كافة الحقول المطلوبة.');
+    }
+});
+
+// حفظ المنتج في Local Storage
+function saveProduct(product) {
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
+    products.push(product);
+    localStorage.setItem('products', JSON.stringify(products));
+    displayProducts(); // تحديث عرض المنتجات فورًا
+}
+
+// دالة لعرض المنتجات
+function displayProducts() {
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
+    const productsContainer = document.querySelector('.products'); // تأكد من وجود هذا العنصر في الصفحة الرئيسية
+
+    if (productsContainer) {
+        productsContainer.innerHTML = '';
+        products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+            productDiv.innerHTML = `
+                <img src="${product.images[0]}" alt="${product.name}">
+                <p>${product.name}</p>
+                <p>${product.price} ريال</p>
+            `;
+            productsContainer.appendChild(productDiv);
         });
-
-        // نشر المنتج
-        productForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const productName = document.getElementById('productName').value;
-            const productDetails = document.getElementById('productDetails').value;
-            const productPrice = document.getElementById('productPrice').value;
-            const whatsappNumber = document.getElementById('whatsappNumber').value;
-
-            if (productName && productDetails && productPrice && whatsappNumber && productImagesData.length) {
-                const newProduct = {
-                    name: productName,
-                    details: productDetails,
-                    price: productPrice,
-                    whatsapp: whatsappNumber,
-                    images: productImagesData
-                };
-
-                saveProduct(newProduct);
-                alert('تم نشر المنتج بنجاح!');
-                productForm.reset();
-                imagesPreview.innerHTML = '';
-            } else {
-                alert('يرجى تعبئة كافة الحقول المطلوبة.');
-            }
-        });
-
-        // حفظ المنتج في Local Storage
-        function saveProduct(product) {
-            const products = JSON.parse(localStorage.getItem('products') || '[]');
-            products.push(product);
-            localStorage.setItem('products', JSON.stringify(products));
-        }
-
-        // وظيفة الرجوع
-        function goBack() {
-            window.history.back();
-        }
+    }
+}
     </script>
 </body>
 </html>

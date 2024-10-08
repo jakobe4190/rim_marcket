@@ -299,10 +299,35 @@
     </div>
 
     <script>
-        function removeItem(button) {
-            button.parentElement.remove(); // إزالة المنتج من العربة
-            alert('تمت إزالة المنتج من العربة.');
-        }
+     // عرض المنتجات المحفوظة في العربة
+function displayCartItems() {
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    const cartItemsContainer = document.querySelector('.cart-items');
+
+    cartItemsContainer.innerHTML = '';
+    cartItems.forEach(item => {
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.className = 'cart-item';
+        cartItemDiv.innerHTML = `
+            <img src="${item.images[0]}" alt="${item.name}">
+            <p>اسم المنتج: ${item.name}</p>
+            <p>السعر: ${item.price} ريال</p>
+            <button onclick="removeItem('${item.name}')">إزالة</button>
+        `;
+        cartItemsContainer.appendChild(cartItemDiv);
+    });
+}
+
+function removeItem(productName) {
+    let cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    cartItems = cartItems.filter(item => item.name !== productName);
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+    displayCartItems();
+    alert('تمت إزالة المنتج من العربة.');
+}
+
+// عرض المنتجات عند تحميل الصفحة
+displayCartItems();
     </script>
 </body>
 </html>

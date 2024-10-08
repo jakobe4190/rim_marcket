@@ -166,31 +166,45 @@
     </div>
 
     <script>
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const emailOrPhone = document.getElementById('emailOrPhone').value;
+    const password = document.getElementById('password').value;
 
-        function showSignUp() {
-            loginForm.style.display = 'none';
-            signupForm.style.display = 'block';
-            forgotPasswordForm.style.display = 'none';
-        }
+    // تحقق من وجود الحساب
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(user => user.emailOrPhone === emailOrPhone && user.password === password);
 
-        function showLogin() {
-            loginForm.style.display = 'block';
-            signupForm.style.display = 'none';
-            forgotPasswordForm.style.display = 'none';
-        }
+    if (user) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        alert('تم تسجيل الدخول بنجاح!');
+        window.location.href = 'home.html'; // توجيه إلى الصفحة الرئيسية
+    } else {
+        alert('البريد الإلكتروني أو كلمة السر غير صحيحة.');
+    }
+});
 
-        function showForgotPassword() {
-            loginForm.style.display = 'none';
-            signupForm.style.display = 'none';
-            forgotPasswordForm.style.display = 'block';
-        }
+// إنشاء حساب
+signupForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const emailOrPhone = document.getElementById('signupEmailOrPhone').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
 
-        function goBack() {
-            window.history.back();
-        }
+    if (password !== confirmPassword) {
+        alert('كلمة السر وتأكيدها غير متطابقين.');
+        return;
+    }
+
+    // حفظ الحساب الجديد
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    users.push({ emailOrPhone, password });
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('isLoggedIn', 'true');
+    alert('تم إنشاء الحساب بنجاح!');
+    window.location.href = 'home.html'; // توجيه إلى الصفحة الرئيسية
+});
     </script>
 </body>
 </html>

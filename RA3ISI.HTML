@@ -311,6 +311,23 @@
         const menu = document.getElementById('menu');
         menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
+function filterByCategory(category) {
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
+    const filteredProducts = products.filter(product => product.category === category); // تأكد من أن المنتج يحتوي على الفئة
+    const productsContainer = document.querySelector('.products');
+
+    productsContainer.innerHTML = '';
+    filteredProducts.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+        productDiv.innerHTML = `
+            <img src="${product.images[0]}" alt="${product.name}">
+            <p>${product.name}</p>
+            <p>${product.price} ريال</p>
+        `;
+        productsContainer.appendChild(productDiv);
+    });
+}
 </script>
 
 </body>
