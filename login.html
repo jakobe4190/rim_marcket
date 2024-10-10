@@ -50,7 +50,7 @@
             text-align: right;
         }
 
-        .submit-btn, .google-btn, .facebook-btn {
+        .submit-btn {
             background-color: #17963d;
             color: #ffffff;
             padding: 10px 20px;
@@ -62,15 +62,7 @@
             font-size: 16px;
         }
 
-        .google-btn {
-            background-color: #db4437;
-        }
-
-        .facebook-btn {
-            background-color: #4267B2;
-        }
-
-        .submit-btn:hover, .google-btn:hover, .facebook-btn:hover {
+        .submit-btn:hover {
             opacity: 0.9;
         }
 
@@ -109,8 +101,8 @@
         <h2>تسجيل الدخول</h2>
         <form id="loginForm">
             <div class="form-group">
-                <label for="emailOrPhone">البريد الإلكتروني أو رقم الهاتف:</label>
-                <input type="text" id="emailOrPhone" placeholder="أدخل البريد الإلكتروني أو رقم الهاتف" required>
+                <label for="phone">رقم الهاتف:</label>
+                <input type="text" id="phone" placeholder="أدخل رقم الهاتف" required>
             </div>
 
             <div class="form-group">
@@ -119,18 +111,15 @@
             </div>
 
             <button type="submit" class="submit-btn">تسجيل الدخول</button>
-            <button type="button" class="google-btn">الدخول باستخدام Google</button>
-            <button type="button" class="facebook-btn">الدخول باستخدام Facebook</button>
-
-            <a href="#" class="link" onclick="showForgotPassword()">نسيت كلمة السر؟</a>
             <a href="#" class="link" onclick="showSignUp()">إنشاء حساب جديد</a>
+            <a href="#" class="link" onclick="showForgotPassword()">نسيت كلمة السر؟</a>
         </form>
 
         <form id="signupForm" style="display: none;">
             <h2>إنشاء حساب</h2>
             <div class="form-group">
-                <label for="signupEmailOrPhone">البريد الإلكتروني أو رقم الهاتف:</label>
-                <input type="text" id="signupEmailOrPhone" placeholder="أدخل البريد الإلكتروني أو رقم الهاتف" required>
+                <label for="signupPhone">رقم الهاتف:</label>
+                <input type="text" id="signupPhone" placeholder="أدخل رقم الهاتف" required>
             </div>
 
             <div class="form-group">
@@ -144,17 +133,14 @@
             </div>
 
             <button type="submit" class="submit-btn">إنشاء حساب</button>
-            <button type="button" class="google-btn">التسجيل باستخدام Google</button>
-            <button type="button" class="facebook-btn">التسجيل باستخدام Facebook</button>
-
             <a href="#" class="link" onclick="showLogin()">لديك حساب بالفعل؟ تسجيل الدخول</a>
         </form>
 
         <form id="forgotPasswordForm" style="display: none;">
             <h2>استعادة كلمة السر</h2>
             <div class="form-group">
-                <label for="recoveryEmailOrPhone">البريد الإلكتروني أو رقم الهاتف:</label>
-                <input type="text" id="recoveryEmailOrPhone" placeholder="أدخل البريد الإلكتروني أو رقم الهاتف" required>
+                <label for="recoveryPhone">رقم الهاتف:</label>
+                <input type="text" id="recoveryPhone" placeholder="أدخل رقم الهاتف" required>
             </div>
 
             <button type="submit" class="submit-btn">استعادة كلمة السر</button>
@@ -190,6 +176,53 @@
         function goBack() {
             window.history.back();
         }
+
+        // دالة تسجيل الدخول
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(user => user.phone === phone && user.password === password);
+
+            if (user) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                alert('تم تسجيل الدخول بنجاح!');
+                window.location.href = 'home.html'; // استبدل هذا برابط الصفحة الرئيسية أو الوجهة المطلوبة
+            } else {
+                alert('رقم الهاتف أو كلمة السر غير صحيحة.');
+            }
+        });
+
+        // دالة إنشاء حساب
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('كلمة السر وتأكيدها غير متطابقين.');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userExists = users.some(user => user.phone === phone);
+
+            if (userExists) {
+                alert('رقم الهاتف مستخدم بالفعل.');
+            } else {
+                const newUser = { phone, password };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                alert('تم إنشاء الحساب بنجاح!');
+                window.location.href = ''; // استبدل هذا برابط الصفحة الرئيسية أو الوجهة المطلوبة
+            }
+        });
     </script>
 </body>
 </html>
