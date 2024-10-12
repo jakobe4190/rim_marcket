@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية - موقع التجارة الإلكترونية</title>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+         
+        }
+
+        /* تنسيق الهيدر */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 2px;
+            background-color: #178645;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+           
+        }
+
+        /* اللوغو كصورة */
+        .logo img {
+            height: 50px;
+        }
+
+        /* أزرار تسجيل الدخول وإنشاء الحساب بجانب اللوغو */
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        align-items: center;
+        }
+
+        .auth-buttons a {
+            padding: 5px 5px;
+            background-color: #f3f3f3;
+            color: #030303;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* مربع البحث */
+        .search-bar {
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+           
+           
+        }
+
+        .search-bar input {
+            width: 60%; /* عرض مربع البحث أصغر */
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px; /* إضافة مسافة بين مربع البحث والبرغر */
+        }
+
+        /* البرغر منيو */
+        .burger-menu {
+            display: flex;
+           
+            width: 30px;
+            height: 25px;
+
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .burger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+
+        }
+
+        /* قائمة البرغر */
+        .menu {
+            display: none; /* إخفاء القائمة بشكل افتراضي */
+            position: absolute;
+            top: 70px; /* تحريك القائمة تحت الهيدر */
+            right: 50px; /* إبعادها عن الحافة */
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            z-index: 1000; /* جعلها فوق العناصر الأخرى */
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee; /* إضافة خط بين العناصر */
+        }
+
+        .menu a:last-child {
+            border-bottom: none; /* إزالة الخط الأخير */
+        }
+
+        .menu a:hover {
+            background-color: #f0f0f0; /* تغيير اللون عند التمرير */
+        }
+
+        /* تنسيق الفئات بشكل أفقي مع إمكانية التمرير */
+        .categories-container {
+            overflow-x: auto; /* السماح بالتمرير الأفقي */
+            white-space: nowrap; /* منع التمدد العمودي */
+            padding: 10px 0; /* إضافة حواف */
+          
+    
+        }
+
+        .categories {
+            display: inline-flex; /* ترتيب العناصر أفقيًا */
+            gap: 10px; /* تقليل الفجوة بين الفئات */
+           
+        }
+
+        .category {
+            width: 100px; /* عرض الفئة */
+            text-align: center;
+            cursor: pointer;
+            flex-shrink: 0; /* منع انكماش الفئة */
+        }
+
+        .category img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .category p {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* المنتجات التي يضعها المستخدم */
+        .products {
+            margin: 20px auto;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product {
+            display: inline-block;
+            width: 150px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .burger-menu {
+                display: flex;
+            }
+
+            .auth-buttons {
+                display: none; /* إخفاء الأزرار في الشاشات الصغيرة */
+            }
+
+            .search-bar {
+                flex-direction: row; /* محاذاة العناصر بشكل أفقي */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <!-- وضع صورة اللوغو هنا -->
+        <img src="logo.png" alt="Logo">
+    </div>
+    <div class="auth-buttons">
+        <a href="publish.html" class="publish-button">نشر منتج</a>
+        <a href="login.html">تسجيل الدخول</a>
+        <a href="login.html">إنشاء حساب</a>
+    </div>
+</header>
+
+<!-- مربع البحث والبرغر منيو -->
+<div class="search-bar">
+    <input type="text" placeholder="ابحث عن المنتجات...">
+    <div class="burger-menu" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+<!-- القائمة المنسدلة للبرغر منيو -->
+<div class="menu" id="menu">
+    <a href="publish.html" class="publish-button">نشر منتج</a>
+        <a href="login.html">تسجيل الدخول</a>
+        <a href="signup.html">إنشاء حساب</a>
+    <a href="3rb.html">العربة</a>
+    <a href="mchkl.html">الإبلاغ عن مشكلة</a>
+    <a href="lou9a.html">اللغة</a>
+    <a href="t3limat.html">التعليمات</a>
+</div>
+
+<!-- أقسام المنتجات بترتيب أفقي مع إمكانية التمرير -->
+<section class="categories-container">
+    <div class="categories">
+        <div class="category" onclick="alert('فئة الطعام!')">
+            <img src="food.png" alt="طعام">
+            <p>طعام</p>
+        </div>
+        <div class="category" onclick="alert('فئة الأجهزة!')">
+            <img src="devis.png" alt="أجهزة">
+            <p>أجهزة</p>
+        </div>
+        <div class="category" onclick="alert('فئة الأزياء!')">
+            <img src="klos.png" alt="أزياء">
+            <p>أزياء</p>
+        </div>
+        <div class="category" onclick="alert('فئة الأطفال!')">
+            <img src="kids.png" alt="أطفال">
+            <p>أطفال</p>
+        </div>
+        <div class="category" onclick="alert('فئة الأثاث!')">
+            <img src="athath.png" alt="أثاث">
+            <p>أثاث</p>
+        </div>
+        <div class="category" onclick="alert('فئة الكتب!')">
+            <img src="books.png" alt="كتب">
+            <p>كتب</p>
+        </div>
+        <div class="category" onclick="alert('فئة الملابس!')">
+            <img src="5demat.png" alt="خدمات">
+            <p>خدمات</p>
+        </div>
+        <div class="category" onclick="alert('فئة الإكسسوارات!')">
+            <img src="skn.png" alt="سكن">
+            <p>سكن</p>
+        </div>
+        <div class="category" onclick="alert('فئة الإكسسوارات!')">
+            <img src="adewat.png" alt="ادوات">
+            <p>ادوات</p>
+        </div>
+        <div class="category" onclick="alert('فئة الإكسسوارات!')">
+            <img src="mike.png" alt="إكسسوارات">
+            <p>نسائي</p>
+        </div>
+    </div>
+</section>
+<script>
+    // تحقق مما إذا كان المستخدم مسجلاً دخوله
+    function checkLoginStatus() {
+        // افترض أن حالة تسجيل الدخول يتم تخزينها في localStorage
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+
+        if (isLoggedIn === 'true') {
+            // إذا كان المستخدم مسجلاً دخوله، انقله إلى الصفحة الرئيسية أو إلى صفحة النشر
+            window.location.href = 'home.html'; // استبدل هذا بـ URL الصفحة الرئيسية أو النشر
+        } else {
+            // إذا لم يكن مسجلاً دخوله، يعرض نموذج تسجيل الدخول أو التسجيل
+            showLogin();
+        }
+    }
+
+    // قم بتسجيل الدخول وتخزين حالة تسجيل الدخول
+    function login() {
+        // قم بتنفيذ عملية تسجيل الدخول هنا (التحقق من البريد الإلكتروني وكلمة السر)
+        localStorage.setItem('isLoggedIn', 'true');
+        window.location.href = 'home.html'; // استبدل هذا بـ URL الصفحة الرئيسية أو النشر
+    }
+
+    // عند تسجيل الخروج، امسح حالة تسجيل الدخول
+    function logout() {
+        localStorage.setItem('isLoggedIn', 'false');
+        window.location.href = 'login.html'; // استبدل هذا بـ URL صفحة تسجيل الدخول
+    }
+
+    // استدعاء دالة التحقق عند تحميل الصفحة
+    checkLoginStatus();
+</script>
+<!-- المنتجات التي أضافها المستخدم -->
+<section class="products">
+    <!-- هنا سيتم عرض المنتجات التي ينشرها المستخدم -->
+</section>
+
+<script>
+    // تفعيل أو إخفاء البرغر منيو
+    function toggleMenu() {
+        const menu = document.getElementById('menu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+function filterByCategory(category) {
+    const products = JSON.parse(localStorage.getItem('products') || '[]');
+    const filteredProducts = products.filter(product => product.category === category); // تأكد من أن المنتج يحتوي على الفئة
+    const productsContainer = document.querySelector('.products');
+
+    productsContainer.innerHTML = '';
+    filteredProducts.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+        productDiv.innerHTML = `
+            <img src="${product.images[0]}" alt="${product.name}">
+            <p>${product.name}</p>
+            <p>${product.price} ريال</p>
+        `;
+        productsContainer.appendChild(productDiv);
+    });
+}
+</script>
+
+</body>
+</html>
